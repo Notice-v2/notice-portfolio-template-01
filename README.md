@@ -1,6 +1,6 @@
 # Notice App Template
 
-This is a Next.js app template that can be used to build a Notice app. The app includes a home page and a sub page for all articles.
+The Notice App Template is a starting point for building apps that integrate with the Notice platform. 
 
 ## Getting Started
 

@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 html {
+	position: relative;
 	color: rgb(54, 69, 79);
 	backdrop-filter: blur(5px);
 	background-color: rgba(0, 0, 0, 0.005);

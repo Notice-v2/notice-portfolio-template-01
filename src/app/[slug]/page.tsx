@@ -1,4 +1,5 @@
 import { NotFound } from '@/components/NotFound'
+import { PageContent } from '@/components/PageContent'
 import { API } from '@/tools/api'
 import dayjs from 'dayjs'
 import Link from 'next/link'
@@ -54,22 +55,26 @@ export default async function Subpage({ params }: { params: { slug: string } }) 
 						</dd>
 					</dl>
 				</div>
-				<div className="mt-6">
-					<ul className="flex flex-wrap text-sm leading-6 -mt-6 -mx-5">
-						<li className="flex items-center font-medium whitespace-nowrap px-5 mt-6">
-							<img
-								src={data.author.picture}
-								alt=""
-								className="mr-3 w-9 h-9 rounded-full bg-slate-50"
-								decoding="async"
-							/>
-							<div className="text-sm leading-4">
-								<div className="text-base text-slate-900">{data.author.name}</div>
-							</div>
-						</li>
-					</ul>
+				{data.author && (
+					<div className="mt-6">
+						<ul className="flex flex-wrap text-sm leading-6 -mt-6 -mx-5">
+							<li className="flex items-center font-medium whitespace-nowrap px-5 mt-6">
+								<img
+									src={data.author.picture}
+									alt=""
+									className="mr-3 w-9 h-9 rounded-full bg-slate-50"
+									decoding="async"
+								/>
+								<div className="text-sm leading-4">
+									<div className="text-base text-slate-900">{data.author.name}</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				)}
+				<div className="mt-12 prose prose-slate">
+					<PageContent content={data.content} />
 				</div>
-				<div className="mt-12 prose prose-slate"></div>
 			</article>
 		</div>
 	)
