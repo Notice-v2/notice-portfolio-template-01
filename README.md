@@ -4,43 +4,72 @@ This is a Next.js app template that can be used to build a Notice app. The app i
 
 ## Getting Started
 
-To get started with this template, follow these steps:
+### 1. Clone the template:
 
-1. Clone the repository:
+- On Github:
 
-	```bash
-	git clone https://github.com/your-username/notice-app-template.git
-	```
+  ![Use this template](https://assets.notice.studio/readme/use-template.png)
 
-2. Install the dependencies:
+- Or by cloning the repository:
 
-	```bash
-	cd notice-app-template
-	npm install
-	```
+  ```bash
+  git clone https://github.com/your-username/notice-app-template.git <app-name>
+  ```
 
-3. Start the development server:
+### 2. Install the dependencies:
 
-	```bash
-	npm run dev
-	```
+```bash
+npm install
+```
 
-4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000) to see the app in action.
+### 3. Start the development server:
+
+```bash
+npm run dev
+```
+
+### 4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000) to see the app in action.
+
+### 5. Target your Notice project
+
+You will find a `404: notice not found`, that's because the URL doesn't contain any project to target.
+
+In production, that's the role of the wildcard domain `*.notice.site`. In development, you can choose your project by adding a query param: `http://localhost:3000?target=<project>`.
+
+For example, the Notice blog:
+
+```
+http://localhost:3000?target=e7c5eeb4-58f2-46bb-9175-98c4eec0ce15
+```
+
+## Structure
+
+To ensure compatibility and optimal performance, your app must follow the template structure:
+
+- Next.js 14+
+- App Folder (not pages)
+- React SWC for components
+- Tailwind CSS for styling
+
+This setup allows all Notice app developers to sync and work together.
 
 ## Features
 
-This app template includes the following features:
+To properly work, the app needs at least two specific pages:
 
-- Home page: Displays a welcome message and a list of recent articles.
-- Articles page: Displays a list of all articles.
+- Home page: should contain at least one of the project pages
 
-## Customization
+  - Path: `/`
+  - API route: `/projects/${projectId}`
+  - Required function: `extractProjectId(headers, searchParams)` (from `@/tools/api.ts`)
 
-You can customize this app template to fit your specific needs. Here are a few suggestions:
+- Subpage page: should display the page content
+  - Path: `/:pageId`
+  - API route: `/pages/${pageId}`
 
-- Add additional pages or components to enhance the functionality of your Notice app.
-- Customize the styling by modifying the CSS or using a CSS framework of your choice.
-- Integrate with a backend service to fetch and display real articles.
+These pages can fetch the needed data with the prebuilt axios client `API` from `@/tools/api.ts`.
+
+Apart from that, you are free to customize the application as you wish.
 
 ## Contributing
 
