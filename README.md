@@ -39,7 +39,7 @@ In production, that's the role of the wildcard domain `*.notice.site`. In develo
 For example, the Notice blog:
 
 ```
-http://localhost:3000?target=e7c5eeb4-58f2-46bb-9175-98c4eec0ce15
+http://localhost:3000?target=74841f91-594b-4503-9a39-fa962038ba3e
 ```
 
 ## Structure
