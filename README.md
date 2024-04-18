@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Notice App Template
+
+This is a Next.js app template that can be used to build a Notice app. The app includes a home page and a sub page for all articles.
 
 ## Getting Started
 
-First, run the development server:
+To get started with this template, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+	```bash
+	git clone https://github.com/your-username/notice-app-template.git
+	```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Install the dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+	```bash
+	cd notice-app-template
+	npm install
+	```
 
-## Learn More
+3. Start the development server:
 
-To learn more about Next.js, take a look at the following resources:
+	```bash
+	npm run dev
+	```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000) to see the app in action.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Features
 
-## Deploy on Vercel
+This app template includes the following features:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Home page: Displays a welcome message and a list of recent articles.
+- Articles page: Displays a list of all articles.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Customization
+
+You can customize this app template to fit your specific needs. Here are a few suggestions:
+
+- Add additional pages or components to enhance the functionality of your Notice app.
+- Customize the styling by modifying the CSS or using a CSS framework of your choice.
+- Integrate with a backend service to fetch and display real articles.
+
+## Contributing
+
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
+
+## License
+
+This app template is open source and available under the [MIT License](LICENSE).
