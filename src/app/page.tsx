@@ -1,7 +1,10 @@
+import { Hero } from '@/components/Hero'
+import { ImageCard } from '@/components/ImageCard'
+import { Navbar } from '@/components/Navbar'
 import { NotFound } from '@/components/NotFound'
 import { API, extractProjectID } from '@/tools/api'
+import { Metadata } from 'next'
 import { headers } from 'next/headers'
-import Link from 'next/link'
 
 async function getData(searchParams?: Record<string, any>) {
 	const projectId = extractProjectID(headers(), searchParams)
@@ -15,47 +18,74 @@ async function getData(searchParams?: Record<string, any>) {
 	}
 }
 
+export async function generateMetadata({ searchParams }: { searchParams?: Record<string, any> }): Promise<Metadata> {
+	// read route params
+	const id = extractProjectID(headers(), searchParams)
+
+	// fetch data
+	const { data } = await API.get(`/projects/${id}`)
+
+	const metadata: any = {
+		title: '',
+		openGraph: {} as Record<string, string>,
+		twitter: {} as Record<string, string>,
+	}
+
+	data.metadata?.forEach((element: any) => {
+		if (element.tagName === 'title') {
+			metadata.title = element.innerText
+		} else if (element.tagName === 'meta') {
+			const attributes = element.attributes
+			if (attributes.name) {
+				if (attributes.name.startsWith('og:')) {
+					metadata.openGraph[attributes.name.slice(3)] = attributes.content
+				} else if (attributes.name.startsWith('twitter:')) {
+					metadata.twitter[attributes.name.slice(8)] = attributes.content
+				} else {
+					metadata[attributes.name] = attributes.content
+				}
+			} else if (attributes.property) {
+				if (attributes.property.startsWith('og:')) {
+					metadata.openGraph[attributes.property.slice(3)] = attributes.content
+				}
+			}
+		} else if (element.tagName === 'link') {
+			const attributes = element.attributes
+			if (attributes.rel === 'icon') {
+				metadata.icon = attributes.href
+			}
+		}
+	})
+
+	return metadata
+}
+
 export default async function Home({ searchParams }: { searchParams?: Record<string, any> }) {
 	const data = await getData(searchParams)
+	console.log(data, 'data')
+
+	const marginTop = data?.project.subtitle ? 'mt-72 md:mt-76 lg:mt-96' : 'mt-4'
 
 	if (!data) return <NotFound />
 
 	return (
 		<>
-			<header className="py-16 sm:text-center">
-				<h1 className="mb-4 text-3xl sm:text-4xl tracking-tight text-slate-900 font-extrabold">{data.project.name}</h1>
-				{data.project.description ? <p className="text-lg text-slate-700">{data.project.description}</p> : <></>}
-			</header>
-			<div className="space-y-16 lg:px-32 md:px-24">
-				{data.pages.map((page: any) => (
-					<article key={page._id} className="relative group">
-						<Link href={`/${page.slug ?? page._id}`}>
-							<div className="absolute -inset-y-2.5 -inset-x-4 md:-inset-y-4 md:-inset-x-6 sm:rounded-2xl group-hover:bg-slate-100"></div>
-							<div className="relative">
-								<h3 className="text-base font-semibold tracking-tight text-slate-900">{page.title}</h3>
-								<div className="mt-2 mb-4 prose prose-slate prose-a:relative prose-a:z-10 line-clamp-2">
-									<p>{page.description}</p>
-								</div>
-							</div>
-							<div className="flex items-center text-sm text-sky-500 font-medium">
-								<span className="relative">Read more</span>
-								<svg
-									className="relative mt-px overflow-visible ml-2.5 text-sky-300"
-									width="3"
-									height="6"
-									viewBox="0 0 3 6"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<path d="M0 0L3 3L0 6"></path>
-								</svg>
-							</div>
-						</Link>
-					</article>
-				))}
+			<Navbar meta={data?.metadata ?? []} color={data?.project?.accentColor} />
+			{data.project.subtitle && <Hero subtitle={data.project.subtitle} />}
+			<div className={`relative z-10 py-12 px-4 md:px-8 lg:px-12 ${marginTop}`}>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch bg-black">
+					{data?.pages.map((page: any) => (
+						<ImageCard
+							key={page._id}
+							id={page?._id}
+							title={page?.title}
+							description={page?.description}
+							coverImage={page?.coverImage}
+							publishedAt={page?.createdAt}
+							color={data?.project?.accentColor}
+						/>
+					))}
+				</div>
 			</div>
 		</>
 	)
