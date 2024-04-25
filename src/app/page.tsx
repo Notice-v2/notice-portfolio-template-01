@@ -3,6 +3,7 @@ import { ImageCard } from '@/components/ImageCard'
 import { Navbar } from '@/components/Navbar'
 import { NotFound } from '@/components/NotFound'
 import { API, extractProjectID } from '@/tools/api'
+import { MetadataElement, metadataMappings } from '@/tools/metadata'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 
@@ -25,44 +26,53 @@ export async function generateMetadata({ searchParams }: { searchParams?: Record
 	// fetch data
 	const { data } = await API.get(`/projects/${id}`)
 
-	const metadata: any = {
-		title: '',
-		openGraph: {} as Record<string, string>,
-		twitter: {} as Record<string, string>,
-	}
+	const metadataElements: MetadataElement[] = data.metadata || []
 
-	data.metadata?.forEach((element: any) => {
-		if (element.tagName === 'title') {
-			metadata.title = element.innerText
-		} else if (element.tagName === 'meta') {
-			const attributes = element.attributes
-			if (attributes.name) {
-				if (attributes.name.startsWith('og:')) {
-					metadata.openGraph[attributes.name.slice(3)] = attributes.content
-				} else if (attributes.name.startsWith('twitter:')) {
-					metadata.twitter[attributes.name.slice(8)] = attributes.content
+	const metadata = metadataElements.reduce(
+		(acc, { tagName, innerText, attributes }) => {
+			const { name, property, content } = attributes || {}
+			const mappingKeys =
+				metadataMappings[tagName] || (property && metadataMappings[property]) || (name && metadataMappings[name])
+
+			if (mappingKeys) {
+				if (typeof mappingKeys === 'string') {
+					acc[mappingKeys] = innerText
 				} else {
-					metadata[attributes.name] = attributes.content
-				}
-			} else if (attributes.property) {
-				if (attributes.property.startsWith('og:')) {
-					metadata.openGraph[attributes.property.slice(3)] = attributes.content
+					const [requiredTagName, requiredProperty, requiredName] = mappingKeys
+					if (
+						tagName === requiredTagName &&
+						((!requiredProperty && !requiredName) ||
+							(requiredProperty && property === requiredProperty) ||
+							(requiredName && name === requiredName))
+					) {
+						acc[requiredName || requiredProperty] = content
+					}
 				}
 			}
-		} else if (element.tagName === 'link') {
-			const attributes = element.attributes
-			if (attributes.rel === 'icon') {
-				metadata.icon = attributes.href
-			}
-		}
-	})
 
-	return metadata
+			return acc
+		},
+		{} as Record<string, string | undefined>
+	)
+
+	return {
+		title: metadata.title || 'Template Created with Notice',
+		description: metadata.description || 'Notice is an no code editor to craft your content.',
+		openGraph: {
+			title: metadata.ogTitle,
+			description: metadata.ogDescription,
+			images: metadata.ogImage ? [{ url: metadata.ogImage }] : [],
+		},
+		twitter: {
+			title: metadata.twitterTitle,
+			description: metadata.twitterDescription,
+			images: metadata.twitterImage ? [{ url: metadata.twitterImage }] : [],
+		},
+	}
 }
 
 export default async function Home({ searchParams }: { searchParams?: Record<string, any> }) {
 	const data = await getData(searchParams)
-	console.log(data, 'data')
 
 	const marginTop = data?.project.subtitle ? 'mt-72 md:mt-76 lg:mt-96' : 'mt-4'
 
