@@ -2,8 +2,6 @@ import { Navbar } from '@/components/Navbar'
 import { NotFound } from '@/components/NotFound'
 import { PageContent } from '@/components/PageContent'
 import { API } from '@/tools/api'
-import { MetadataElement, metadataMappings } from '@/tools/metadata'
-import { Metadata } from 'next'
 
 async function getData(slug: string) {
 	try {
@@ -14,7 +12,7 @@ async function getData(slug: string) {
 	}
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+/* export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
 	const id = params.slug
 	const { data } = await API.get(`/pages/${id}`)
 	const metadataElements: MetadataElement[] = data.metadata?.elements || []
@@ -60,7 +58,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 			images: metadata.twitterImage ? [{ url: metadata.twitterImage }] : [],
 		},
 	}
-}
+} */
 
 export default async function Subpage({ params }: { params: { slug: string } }) {
 	const data = await getData(params.slug)

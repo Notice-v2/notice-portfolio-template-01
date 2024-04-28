@@ -3,8 +3,6 @@ import { ImageCard } from '@/components/ImageCard'
 import { Navbar } from '@/components/Navbar'
 import { NotFound } from '@/components/NotFound'
 import { API, extractProjectID } from '@/tools/api'
-import { MetadataElement, metadataMappings } from '@/tools/metadata'
-import { Metadata } from 'next'
 import { headers } from 'next/headers'
 
 async function getData(searchParams?: Record<string, any>) {
@@ -19,7 +17,7 @@ async function getData(searchParams?: Record<string, any>) {
 	}
 }
 
-export async function generateMetadata({ searchParams }: { searchParams?: Record<string, any> }): Promise<Metadata> {
+/* export async function generateMetadata({ searchParams }: { searchParams?: Record<string, any> }): Promise<Metadata> {
 	// read route params
 	const id = extractProjectID(headers(), searchParams)
 
@@ -69,7 +67,7 @@ export async function generateMetadata({ searchParams }: { searchParams?: Record
 			images: metadata.twitterImage ? [{ url: metadata.twitterImage }] : [],
 		},
 	}
-}
+} */
 
 export default async function Home({ searchParams }: { searchParams?: Record<string, any> }) {
 	const data = await getData(searchParams)
