@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar'
 import { NotFound } from '@/components/NotFound'
 import { PageContent } from '@/components/PageContent'
 import { API } from '@/tools/api'
+import { Metadata } from 'next'
 
 async function getData(slug: string) {
 	try {
@@ -12,41 +13,59 @@ async function getData(slug: string) {
 	}
 }
 
-/* export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
 	const id = params.slug
 	const { data } = await API.get(`/pages/${id}`)
-	const metadataElements: MetadataElement[] = data.metadata?.elements || []
 
-	const metadata = metadataElements.reduce(
-		(acc, { tagName, innerText, attributes }) => {
-			const { name, property, content } = attributes || {}
-			const mappingKeys =
-				metadataMappings[tagName] || (property && metadataMappings[property]) || (name && metadataMappings[name])
+	const metadata = {
+		title: '',
+		description: '',
+		icon: '',
+		ogTitle: '',
+		ogDescription: '',
+		ogImage: '',
+		twitterTitle: '',
+		twitterDescription: '',
+		twitterImage: '',
+	}
 
-			if (mappingKeys) {
-				if (typeof mappingKeys === 'string') {
-					acc[mappingKeys] = innerText
-				} else {
-					const [requiredTagName, requiredProperty, requiredName] = mappingKeys
-					if (
-						tagName === requiredTagName &&
-						((!requiredProperty && !requiredName) ||
-							(requiredProperty && property === requiredProperty) ||
-							(requiredName && name === requiredName))
-					) {
-						acc[requiredName || requiredProperty] = content
-					}
-				}
+	for (const item of data.metadata?.elements) {
+		const { tagName, innerText, attributes } = item
+
+		if (tagName === 'title') {
+			metadata.title = innerText
+			metadata.ogTitle = innerText
+			metadata.twitterTitle = innerText
+		} else if (tagName === 'link') {
+			const { rel, href } = attributes
+			metadata.icon = href
+		} else if (tagName === 'meta') {
+			const { name, property, content, rel, href } = attributes
+
+			if (name === 'description') {
+				metadata.description = content
+				metadata.ogDescription = content
+				metadata.twitterDescription = content
+			} else if (property === 'og:image') {
+				metadata.ogImage = content
+			} else if (name === 'twitter:image') {
+				metadata.twitterImage = content
 			}
-
-			return acc
-		},
-		{} as Record<string, string | undefined>
-	)
+		}
+	}
 
 	return {
-		title: metadata.title || 'Template Page Created with Notice',
+		title: metadata.title || 'Template Created with Notice',
 		description: metadata.description || 'Notice is an no code editor to craft your content.',
+		icons: {
+			icon: metadata.icon,
+			shortcut: metadata.icon,
+			apple: metadata.icon,
+			other: {
+				rel: 'apple-touch-icon',
+				url: metadata.icon,
+			},
+		},
 		openGraph: {
 			title: metadata.ogTitle,
 			description: metadata.ogDescription,
@@ -58,7 +77,7 @@ async function getData(slug: string) {
 			images: metadata.twitterImage ? [{ url: metadata.twitterImage }] : [],
 		},
 	}
-} */
+}
 
 export default async function Subpage({ params }: { params: { slug: string } }) {
 	const data = await getData(params.slug)
