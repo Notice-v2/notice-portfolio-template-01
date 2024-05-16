@@ -17,8 +17,10 @@ export function CodeBlock({ block }: Props) {
 	const code = content[0]
 
 	useEffect(() => {
-		const blocks = document.querySelectorAll('pre code')
-		blocks.forEach(hljs.highlightElement as any)
+		hljs.configure({
+			languages: ['js', 'ts', 'jsx', 'tsx', 'css', 'scss', 'html', 'shell'],
+		})
+		hljs.highlightAll()
 	}, [])
 
 	return (
