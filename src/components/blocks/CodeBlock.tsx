@@ -17,7 +17,9 @@ export function CodeBlock({ block }: Props) {
 	const code = content[0]
 
 	useEffect(() => {
-		hljs.highlightAll()
+		if (typeof window !== 'undefined') {
+			hljs.highlightAll()
+		}
 	}, [])
 
 	return (
