@@ -86,9 +86,9 @@ export default async function Subpage({ params }: { params: { slug: string } }) 
 
 	return (
 		<>
-			<Navbar meta={data?.metadata?.elements ?? []} />
+			<Navbar meta={data?.metadata?.elements ?? []} projectId={data?.projectId} />
 
-			<div className="mt-32 md:mt-36 lg:mt-40 w-full px-4 md:px-12 text-white prose prose-slate">
+			<div className="w-full md:w-9/12 mt-32 md:mt-36 lg:mt-40 mx-auto px-4 md:px-12 text-white prose prose-slate">
 				<h1 className="text-4xl mb-8 text-center font-bold">{data.title}</h1>
 				<PageContent content={data.content} />
 			</div>

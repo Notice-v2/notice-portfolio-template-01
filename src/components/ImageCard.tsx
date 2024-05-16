@@ -24,7 +24,7 @@ export const ImageCard = ({ id, title, description, coverImage, publishedAt, col
 		<Link href={id}>
 			<div className={`relative h-full ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
 				<img
-					className="h-full w-full object-cover rounded-lg"
+					className="h-80 w-full object-cover rounded-lg"
 					src={
 						!coverImage || coverImage === '-'
 							? 'https://assets-notice.b-cdn.net/renderer/image-not-found-in-blog.svg'
