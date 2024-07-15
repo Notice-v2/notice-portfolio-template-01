@@ -3,6 +3,7 @@ import { CodeBlock } from './CodeBlock'
 import { DividerBlock } from './DividerBlock'
 import { HeaderBlock } from './HeaderBlock'
 import { HintBlock } from './HintBlock'
+import { HTMLBlock } from './HTML.block'
 import { ImageBlock } from './ImageBlock'
 import { ListItemBlock } from './ListItemBlock'
 import { NumberedListBlock } from './NumberListBlock'
@@ -39,6 +40,8 @@ export function renderBlock(block: any) {
 			)
 		case 'image':
 			return <ImageBlock key={block.id} block={block} />
+		case 'html':
+			return <HTMLBlock key={block.id} block={block} />
 		default:
 			return <></>
 

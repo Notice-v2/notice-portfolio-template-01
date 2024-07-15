@@ -1,7 +1,12 @@
 import { NoticeLogo } from '@/logo/NoticeLogo'
 import Link from 'next/link'
 
-export default function CreatedWithNotice() {
+interface Props {
+	shouldHide: boolean
+}
+
+export default function CreatedWithNotice({ shouldHide }: Props) {
+	if (shouldHide) return null
 	return (
 		<div className="fixed bottom-2 right-2 bg-neutral-900 border border-gray-600 rounded-lg shadow-md p-2 flex items-center justify-center z-50">
 			<div>
